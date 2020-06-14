@@ -2,6 +2,10 @@
 import Vue from 'vue'
 // 导入路由
 import VueRouter from 'vue-router'
+// 导入进度条nprogress
+import nprogress from 'nprogress'
+// 导入进度条nprogress样式
+import 'nprogress/nprogress.css'
 Vue.use(VueRouter)
 
 const routes = [
@@ -42,8 +46,10 @@ const routes = [
 const router = new VueRouter({
   routes
 })
-// 使用路由导航守卫来判断用户是否登录
+// 使用全局前置路由导航守卫来判断用户是否登录
 router.beforeEach((to, from, next) => {
+  // 开启进度条
+  nprogress.start()
   // to: 跳转到达的路由,from: 发起跳转的路由,next: 一个函数,是否执行后续代码
   if (to.path !== '/login') {
     // 获取本地存储的数据,有数据则表示登录过
@@ -59,5 +65,9 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
+// 使用后置钩子
+router.afterEach((to, from) => {
+  // 关闭进度条
+  nprogress.done()
+})
 export default router
